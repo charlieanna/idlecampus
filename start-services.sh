@@ -160,20 +160,20 @@ start_rails() {
         print_success "Seed data loaded"
     fi
     
-    # Check if already running on port 3001
-    if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        print_warning "Rails already running on port 3001"
+    # Check if already running on port 3000
+    if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+        print_warning "Rails already running on port 3000"
     else
-        # Start Rails in background on port 3001
-        print_status "Starting Rails on port 3001..."
-        nohup bundle exec rails server -p 3001 > rails.log 2>&1 &
+        # Start Rails in background on port 3000
+        print_status "Starting Rails on port 3000..."
+        nohup bundle exec rails server -p 3000 > rails.log 2>&1 &
         RAILS_PID=$!
         echo $RAILS_PID > rails.pid
         
         # Wait for Rails to be ready
         print_status "Waiting for Rails to start (this may take 10-15 seconds)..."
         for i in {1..30}; do
-            if curl -s http://localhost:3001 > /dev/null 2>&1; then
+            if curl -s http://localhost:3000 > /dev/null 2>&1; then
                 print_success "Rails Application started (PID: $RAILS_PID)"
                 break
             fi
@@ -208,8 +208,8 @@ print_service_status() {
         print_error "Flask ML:     Not running"
     fi
     
-    if lsof -Pi :3001 -sTCP:LISTEN -t >/dev/null 2>&1; then
-        print_success "Rails App:    Running (port 3001)"
+    if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+        print_success "Rails App:    Running (port 3000)"
     else
         print_error "Rails App:    Not running"
     fi
@@ -219,7 +219,7 @@ print_service_status() {
     echo "   Access URLs"
     echo "=========================================="
     echo ""
-    echo "  Rails App:        http://localhost:3001"
+    echo "  Rails App:        http://localhost:3000"
     echo "  Flask ML API:     http://localhost:5000/api/health"
     echo "  Redis:            redis://localhost:6379"
     echo ""
