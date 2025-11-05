@@ -1,0 +1,11 @@
+[submodule "frontend"]
+	path = frontend
+	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/frontend
+
+[submodule "backend"]
+	path = backend
+	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/backend
+
+[submodule "ml-service"]
+	path = ml-service
+	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/ml-service

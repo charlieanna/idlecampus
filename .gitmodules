@@ -9,3 +9,9 @@
 [submodule "ml-service"]
 	path = ml-service
 	url = https://github.com/ankothari1986-ux/idlecampus-ml-service.git
+[submodule "adaptive-learning"]
+	path = adaptive-learning
+	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/adaptive-learning
+[submodule "adaptive-learning-gem"]
+	path = adaptive-learning-gem
+	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/adaptive-learning-gem
