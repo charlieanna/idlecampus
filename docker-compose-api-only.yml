@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    networks:
+      - stackexchange-net
+
+  stackexchange-api:
+    build:
+      context: ./docker-python
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5000"
+    env_file:
+      - ${ENV_FILE:-.env.development}  # Default to development if not specified
+    environment:
+      - PYTHONPATH=/app/docker-python/neo_flask
+      - REDIS_HOST=redis
+      - MODE=${MODE:-development}
+      - ENABLED_SITES=${ENABLED_SITES}
+      - FLASK_ENV=${FLASK_ENV:-development}
+      - FLASK_DEBUG=${FLASK_DEBUG:-1}
+    volumes:
+      - ./docker-python:/app/docker-python
+      - ./data:/app/data:ro  # Read-only access to data
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: python /app/docker-python/neo_flask/unified_app.py
+    networks:
+      - stackexchange-net
+
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=sovisits_development
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - stackexchange-net
+
+networks:
+  stackexchange-net:
+    driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:

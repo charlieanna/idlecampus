@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # CKAD Interactive Learning - Standalone React App
+  ckad-app:
+    build:
+      context: ./kubernetes/learn/app
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./kubernetes/learn/app:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host 0.0.0.0
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5001"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      - learning-network
+
+  # Rails App (optional - if you want to access via /kubernetes/course)
+  # rails-app:
+  #   build:
+  #     context: ./entry-app/SOVisits
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3001:3000"
+  #   volumes:
+  #     - ./entry-app/SOVisits:/app
+  #   environment:
+  #     - RAILS_ENV=development
+  #     - DATABASE_URL=postgresql://postgres:password@db:5432/sovisits_development
+  #   depends_on:
+  #     - db
+  #     - ckad-app
+  #   networks:
+  #     - learning-network
+
+  # Database (if Rails is enabled)
+  # db:
+  #   image: postgres:14-alpine
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data
+  #   environment:
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_DB=sovisits_development
+  #   networks:
+  #     - learning-network
+
+networks:
+  learning-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
+

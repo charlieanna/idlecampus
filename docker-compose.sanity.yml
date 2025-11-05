@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  redis:
+    ports:
+      - "6380:6379"
+  rails_web:
+    build:
+      context: ./entry-app/SOVisits
+      dockerfile: Dockerfile
+
+networks:
+  adaptive_learning_network:
+    ipam:
+      config:
+        - subnet: 172.31.0.0/16

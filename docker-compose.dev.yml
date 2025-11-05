@@ -1,0 +1,22 @@
+# Development Docker Compose - Redis Only
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: dev_redis
+    command: redis-server --appendonly no --save ""
+    ports:
+      - "6379:6379"
+    networks:
+      - dev_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+networks:
+  dev_network:
+    driver: bridge
