@@ -1,11 +1,11 @@
 [submodule "frontend"]
 	path = frontend
-	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/frontend
+	url = https://github.com/ankothari1986-ux/idlecampus-frontend.git
 
 [submodule "backend"]
 	path = backend
-	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/backend
+	url = https://github.com/ankothari1986-ux/idlecampus-backend.git
 
 [submodule "ml-service"]
 	path = ml-service
-	url = file:///Users/ankurkothari/Documents/workspace/idlecampus/ml-service
+	url = https://github.com/ankothari1986-ux/idlecampus-ml-service.git
