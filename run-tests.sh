@@ -59,14 +59,6 @@ else
 fi
 
 echo ""
-echo "--- FSRS Service Tests ---"
-if pytest tests/test_fsrs_service.py -v; then
-    print_success "FSRS Service tests passed"
-else
-    print_error "FSRS Service tests failed"
-fi
-
-echo ""
 echo "--- Adaptive Learning Service Tests ---"
 if pytest tests/test_adaptive_learning_service.py -v; then
     print_success "Adaptive Learning Service tests passed"

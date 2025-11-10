@@ -1,0 +1,48 @@
+name: Go Capstone CI
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'examples/go-concurrency-capstone/**'
+      - 'backend/db/seeds/golang_concurrency_units.rb'
+      - '.github/workflows/go-capstone-ci.yml'
+      - 'plans/golang_teaching_upgrade.md'
+  pull_request:
+    paths:
+      - 'examples/go-concurrency-capstone/**'
+      - 'backend/db/seeds/golang_concurrency_units.rb'
+      - '.github/workflows/go-capstone-ci.yml'
+      - 'plans/golang_teaching_upgrade.md'
+
+concurrency:
+  group: go-capstone-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-bench:
+    name: Test (-race) and Bench (non-blocking)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: examples/go-concurrency-capstone
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          cache: true
+
+      - name: Go env
+        run: go env
+
+      - name: Test (race detector)
+        run: go test ./... -race -count=1
+
+      - name: Benchmarks (non-blocking)
+        run: go test ./internal/parse -bench=. -benchmem -run ^$
+        continue-on-error: true
+
